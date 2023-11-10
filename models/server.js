@@ -1,5 +1,6 @@
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
+const { dbConnection } = require('../database/config');
 require('dotenv').config()
 
 class Server {
@@ -9,11 +10,18 @@ class Server {
         this.port = process.env.PORT;
         this.usersRoutes = '/api/users'
 
+        // Conexión a la bbdd
+        this.databaseConnection();
+
         //Middlewares
         this.middlewares();
 
         //Rutas de la aplicación
         this.routes();
+    }
+
+    async databaseConnection(){
+        await dbConnection();
     }
 
     middlewares(){
