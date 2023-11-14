@@ -33,7 +33,8 @@ const UsuarioSchema = Schema({
 
 //creo un método como una función nomal porque la función flecha mantiene la referencia del 'this' fuera de la función y yo quiero hacer referencia a la instancia creada
 UsuarioSchema.methods.toJSON = function(){
-   const {__v, password, ...usuario} =  this.toObject();
+   const {__v, password, _id ,...usuario} =  this.toObject();
+   usuario.uid = _id;
    return usuario //con esto por consola veo todo menos el __v y la contraseña
 }
 

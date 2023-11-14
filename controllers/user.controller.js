@@ -2,13 +2,12 @@ const { response } = require('express');
 const bcrypt = require('bcryptjs')
 
 const Usuario = require('../models/usuario');
-const { Promise } = require('mongoose');
 
 
 const getUser = async(req,res = response) =>{
 
     const { limite , desde } = req.query //ambos parámetros tienen valores por default en el express-validator antes de llegar al controlador
-    const estado_true = { estado:true}
+    const estado_true = {estado:true}
 
     /*  Lo siguiente lo resumo en el Promise.all pero lo dejo para referencia
 
@@ -16,7 +15,7 @@ const getUser = async(req,res = response) =>{
 
     const total = await Usuario.countDocuments(estado_true); */
 
-    const [ total, usuarios] = await Promise.all([
+    const [total, usuarios] = await Promise.all([
         Usuario.countDocuments(estado_true),
         Usuario.find(estado_true).limit(Number(limite)).skip(Number(desde))
     ])
@@ -33,14 +32,13 @@ const postUser = async(req,res) =>{
     const usuario = new Usuario({nombre, correo, password, role});
 
     //Hash de la contraseña
-    const salt = bcrypt.genSaltSync();
-    usuario.password = bcrypt.hashSync(password, salt)
+    usuario.password = await bcrypt.hash(password, 10)
 
     // Guardado en db
     await usuario.save();
 
     res.json({
-        msg:'post API - controlador',
+        msg:'Usuario creado',
         usuario
     })
 }
@@ -53,8 +51,7 @@ const putUser = async(req,res) =>{
     const {_id, password, google, correo, ...resto} = req.body;
 
     if(password){
-        const salt = bcrypt.genSaltSync();
-        resto.password = bcrypt.hashSync(password, salt)
+        resto.password = await bcrypt.hash(password, 10)
     }
 
     const usuario = await Usuario.findByIdAndUpdate(id, resto)
@@ -66,16 +63,15 @@ const deleteUser = async (req,res) =>{
 
     const id = req.params.id;
 
-    // Borrar el registro físicamente de la base
+    // Borrar el registro físicamente de la base, no recomendado
     //const usuario = await Usuario.findByIdAndDelete(id)
 
     // Eliminación del registro para la aplicación por cambio de estado, utilizar ESTA forma
     const usuario = await Usuario. findByIdAndUpdate(id,{estado:false})
 
     res.json({
-        msg:`Se elimina el usuario de id ${id}`,
-        usuario        
-    })
+        msg1:"El usuario eliminado es",
+        usuario})
 }
 
 module.exports = {
