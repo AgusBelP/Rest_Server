@@ -8,7 +8,8 @@ class Server {
     constructor(){
         this.app = express(); //genero la instancia de app como una propiedad del servidor
         this.port = process.env.PORT;
-        this.usersRoutes = '/api/users'
+        this.usersRoutes = '/api/users';
+        this.authRoutes = '/api/auth';
 
         // Conexión a la bbdd
         this.databaseConnection();
@@ -40,6 +41,7 @@ class Server {
 
     routes(){
         
+        this.app.use(this.authRoutes,require('../routes/auth.routes'));
         this.app.use(this.usersRoutes,require('../routes/user.routes'))
     }
 
