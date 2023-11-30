@@ -2,7 +2,7 @@ const esAdmin = (req,res,next) => {
 
     if(!req.usuario){
         return res.status(500).json({
-            msg: 'Se quiere verificar el rol sin validra el token primero'
+            msg: 'Se quiere validar el token primero'
         })
     }
     

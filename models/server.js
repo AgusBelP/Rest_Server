@@ -8,8 +8,15 @@ class Server {
     constructor(){
         this.app = express(); //genero la instancia de app como una propiedad del servidor
         this.port = process.env.PORT;
-        this.usersRoutes = '/api/users';
-        this.authRoutes = '/api/auth';
+        this.paths = {
+            auth:'/api/auth',
+            bsqueda:'/api/buscar',
+            categories: '/api/categories',
+            users: '/api/users',
+            products: '/api/products'
+        }
+        
+        
 
         // Conexión a la bbdd
         this.databaseConnection();
@@ -41,8 +48,11 @@ class Server {
 
     routes(){
         
-        this.app.use(this.authRoutes,require('../routes/auth.routes'));
-        this.app.use(this.usersRoutes,require('../routes/user.routes'))
+        this.app.use(this.paths.auth,require('../routes/auth.routes'));
+        this.app.use(this.paths.bsqueda,require('../routes/busqueda.routes'));
+        this.app.use(this.paths.categories,require('../routes/categories.routes'))
+        this.app.use(this.paths.users,require('../routes/user.routes'))
+        this.app.use(this.paths.products,require('../routes/products.routes'))
     }
 
     listen(){

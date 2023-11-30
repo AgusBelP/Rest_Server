@@ -67,7 +67,7 @@ const deleteUser = async (req,res) =>{
     //const usuario = await Usuario.findByIdAndDelete(id)
 
     // Eliminación del registro para la aplicación por cambio de estado, utilizar ESTA forma
-    const usuario = await Usuario. findByIdAndUpdate(id,{estado:false})
+    const usuario = await Usuario.findByIdAndUpdate(id,{estado:false})
 
     res.json({
         msg1:"El usuario eliminado es",
