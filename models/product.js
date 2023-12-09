@@ -29,8 +29,10 @@ const ProductoSchema = Schema({
     disponible: { 
         type: Boolean,
         default: true
+    },
+    img:{
+        type:String
     }
-
 });
 
 //creo un método como una función nomal porque la función flecha mantiene la referencia del 'this' fuera de la función y yo quiero hacer referencia a la instancia creada

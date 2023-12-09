@@ -37,6 +37,14 @@ const checkProductId =  async(id) => {
     }
 }
 
+const checkColecciones = async(coleccion ="", colecciones = []) => {
+
+    if(!colecciones.includes(coleccion)){
+        throw new Error(`La colección ${coleccion} no es permitida. Las colecciones son ${colecciones}`)
+    }
+
+    return true
+}
 
 
 module.exports = {
@@ -44,5 +52,6 @@ module.exports = {
     checkEmail,
     checkMongoId,
     checkCategoria,
-    checkProductId
+    checkProductId,
+    checkColecciones
 }

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { dbConnection } = require('../database/config');
+const fileUpload = require('express-fileupload');
 require('dotenv').config()
 
 class Server {
@@ -12,8 +13,9 @@ class Server {
             auth:'/api/auth',
             bsqueda:'/api/buscar',
             categories: '/api/categories',
+            products: '/api/products',
             users: '/api/users',
-            products: '/api/products'
+            uploads: '/api/uploads'
         }
         
         
@@ -44,6 +46,13 @@ class Server {
         // Directorio público
         this.app.use(express.static('public'));
 
+        //Manejo de carga de arhcivovs 
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+            createParentPath : true
+        }));
+
     }
 
     routes(){
@@ -51,8 +60,9 @@ class Server {
         this.app.use(this.paths.auth,require('../routes/auth.routes'));
         this.app.use(this.paths.bsqueda,require('../routes/busqueda.routes'));
         this.app.use(this.paths.categories,require('../routes/categories.routes'))
-        this.app.use(this.paths.users,require('../routes/user.routes'))
         this.app.use(this.paths.products,require('../routes/products.routes'))
+        this.app.use(this.paths.users,require('../routes/user.routes'))
+        this.app.use(this.paths.uploads,require('../routes/uploads.routes'))
     }
 
     listen(){
